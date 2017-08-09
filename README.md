@@ -5,7 +5,8 @@ Slurm overview: https://slurm.schedmd.com/overview.html
 > Slurm is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for large and small Linux clusters. Slurm requires no kernel modifications for its operation and is relatively self-contained. As a cluster workload manager, Slurm has three key functions. First, it allocates exclusive and/or non-exclusive access to resources (compute nodes) to users for some duration of time so they can perform work. Second, it provides a framework for starting, executing, and monitoring work (normally a parallel job) on the set of allocated nodes. Finally, it arbitrates contention for resources by managing a queue of pending work. Optional plugins can be used for accounting, advanced reservation, gang scheduling (time sharing for parallel jobs), backfill scheduling, topology optimized resource selection, resource limits by user or bank account, and sophisticated multifactor job prioritization algorithms.
 
 This guide provides the steps to install a slurm controller node as well as a single compute node.  
-For simplicity sake a few assumptions have been made.  
+The following steps make the follwing assumptions.
+* OS: Ubuntu 16.04
 * Slurm controller node hostname: slurm-ctrl
 * Compute node hostname: linux1
 * Slurm DB Password: slurmdbpass
@@ -31,6 +32,8 @@ $ apt-get install libmunge-dev libmunge2 munge
 $ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
 $ chown munge:munge /etc/munge/munge.key
 $ chmod 400 /etc/munge/munge.key
+$ vi /etc/default/munge
+OPTIONS="--force --key-file /etc/munge/munge.key --num-threads 1"
 $ service munge start
 ```
 
@@ -95,10 +98,13 @@ debug*       up   infinite      1    unk linux1
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and validating credentials.
 https://dun.github.io/munge/
 ```console
+$ apt-get update
 $ apt-get install libmunge-dev libmunge2 munge
 $ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
 $ chown munge:munge /etc/munge/munge.key
 $ chmod 400 /etc/munge/munge.key
+$ vi /etc/default/munge
+OPTIONS="--force --key-file /etc/munge/munge.key --num-threads 1"
 $ service munge start
 ```
 
@@ -107,6 +113,8 @@ $ service munge start
 $ munge -n | unmunge | grep STATUS
 STATUS:           Success (0)
 $ munge -n | ssh slurm-ctrl unmunge | grep STATUS
+STATUS:           Success (0)
+
 ```
 
 
