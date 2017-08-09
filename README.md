@@ -51,4 +51,18 @@ grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';
 flush privileges;
 exit
 
+## Download and build Slurm
+Download tar.bz2 from https://www.schedmd.com/downloads.php
+Copy tar file to /storage
+```console
+$ cd /storage
+$ tar xvjf slurm-17.02.6.tar.bz2
+$ cd slurm-17.02.6
+$ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm
+$ make
+$ make contrib
+$ make install
+```
+
+
 
