@@ -17,6 +17,8 @@ The following steps make the follwing assumptions.
 * Slurm will be used to control SSH access to compute nodes.
 * Compute nodes are DNS resolvable.
 
+The slurm controller node (slurm-ctrl) does not need to be a physical piece of hardware.  A VM is fine.  However, this node will be used by users for compiling codes and as such it should have the same OS and libraries (such as CUDA) that exist on the compute nodes.
+
 ## Install slurm and associated components on slurm controller node.
 Install prerequisites 
 ```console
@@ -130,6 +132,14 @@ PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      1   idle linux1
 ```
 
+### Set up cgroups
+Using memory cgroups to restrict jobs to allocated memory resources requires setting kernel parameters
+```console
+$ vi /etc/default/grub
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
+$ update-grub
+```
+
 ## Finish Slurm configuration
 These commands are run on slurm-ctrl
 ```console
@@ -144,7 +154,6 @@ $ su - nvidia
 $ srun -N 1 hostname
 linux1
 ```
-
 
 
 
