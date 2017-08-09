@@ -146,8 +146,7 @@ GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
 $ update-grub
 ```
 
-## Finish Slurm configuration
-These commands are run on slurm-ctrl
+## Finish Slurm configuration on slurm-ctrl
 ```console
 $ sacctmgr add cluster compute-cluster
 $ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
