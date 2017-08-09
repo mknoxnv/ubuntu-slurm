@@ -67,6 +67,7 @@ Download tar.bz2 from https://www.schedmd.com/downloads.php
 Copy tar file to /storage
 ```console
 $ cd /storage
+$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
@@ -80,11 +81,12 @@ $ useradd slurm
 $ mkdir -p /etc/slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 
-Download slurmdbd.service slurmctld.service slurm.conf slurmdbd.conf from this git repo.
-$ cp slurmdbd.service /lib/systemd/system/
-$ cp slurmctld.service /lib/systemd/system/
-$ cp slurm.conf /etc/slurm/
-$ cp slurmdbd.conf /etc/slurm/
+Copy into place config files from this repo
+$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
+$ cp ubuntu-slurm/slurmdbd.service /lib/systemd/system/
+$ cp ubuntu-slurm/slurmctld.service /lib/systemd/system/
+$ cp ubuntu-slurm/slurm.conf /etc/slurm/
+$ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
 $ systemctl daemon-reload
 $ ln -s /var/run/mysqld/mysqld.sock /tmp/mysqld.sock
 $ systemctl enable slurmdbd
@@ -123,7 +125,11 @@ STATUS:           Success (0)
 ```console
 $ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
 $ mkdir /etc/slurm
-$ scp slurm-ctrl:/etc/slurm/slurm.conf /etc/slurm/slurm.conf 
+$ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
+
+If necessary modify gres.conf to reflect the properties of this compute node.
+$ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
+$ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
 $ mkdir -p /var/spool/slurm/d
 $ systemctl start slurmd
