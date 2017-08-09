@@ -12,12 +12,15 @@ For simplicity sake a few assumptions have been made.
 * Passwordless SSH is working between slurm-ctrl and linux1
 * There is shared storage between all the nodes: /storage & /home
 * The UIDs and GIDs will be consistent between all the nodes.
+* Slurm will be used to control SSH access to compute nodes.
+* Compute nodes are DNS resolvable.
 
 ## Install slurm and associated components on slurm controller node.
 Install prerequisites 
 ```console
-apt-get update
-apt-get install gcc make
+$ apt-get update
+$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev
+$ gem install fpm
 ```
 
 ### Install munge
@@ -52,7 +55,7 @@ flush privileges;
 exit
 ```
 
-## Download and build Slurm
+### Download, build, and install Slurm
 Download tar.bz2 from https://www.schedmd.com/downloads.php
 
 Copy tar file to /storage
@@ -60,11 +63,54 @@ Copy tar file to /storage
 $ cd /storage
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
-$ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm
+$ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
 $ make
 $ make contrib
 $ make install
+$ cd ..
+$ fpm -s dir -t deb -v 1.0 -n slurm-17.02.6 --prefix=/usr -C /tmp/slurm-build .
+$ dpkg -i slurm-17.02.6_1.0_amd64.deb
+$ useradd slurm 
+$ mkdir -p /etc/slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
+$ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
+
+Download slurmdbd.service slurmctld.service slurm.conf slurmdbd.conf from this git repo.
+$ cp slurmdbd.service /lib/systemd/system/
+$ cp slurmctld.service /lib/systemd/system/
+$ cp slurm.conf /etc/slurm/
+$ cp slurmdbd.conf /etc/slurm/
+$ systemctl daemon-reload
+$ ln -s /var/run/mysqld/mysqld.sock /tmp/mysqld.sock
+$ systemctl enable slurmdbd
+$ service slurmdbd start
+$ systemctl enable slurmctld
+$ service slurmctld start
+$ sinfo
+PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+debug*       up   infinite      1    unk linux1
 ```
+## Install slurm and associated components on a compute node.
+
+### Install munge
+MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and validating credentials.
+https://dun.github.io/munge/
+```console
+$ apt-get install libmunge-dev libmunge2 munge
+$ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
+$ chown munge:munge /etc/munge/munge.key
+$ chmod 400 /etc/munge/munge.key
+$ service munge start
+```
+
+### Test munge
+```console
+$ munge -n | unmunge | grep STATUS
+STATUS:           Success (0)
+$ munge -n | ssh slurm-ctrl unmunge | grep STATUS
+```
+
+
+
 
 
 
