@@ -8,6 +8,7 @@ This guide provides the steps to install a slurm controller node as well as a si
 The following steps make the follwing assumptions.
 * OS: Ubuntu 16.04
 * Slurm controller node hostname: slurm-ctrl
+* Non-root user: nvidia
 * Compute node hostname: linux1
 * Slurm DB Password: slurmdbpass
 * Passwordless SSH is working between slurm-ctrl and linux1
@@ -114,8 +115,36 @@ $ munge -n | unmunge | grep STATUS
 STATUS:           Success (0)
 $ munge -n | ssh slurm-ctrl unmunge | grep STATUS
 STATUS:           Success (0)
-
 ```
+
+### Install Slurm
+```console
+$ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
+$ mkdir /etc/slurm
+$ scp slurm-ctrl:/etc/slurm/slurm.conf /etc/slurm/slurm.conf 
+$ useradd slurm
+$ mkdir -p /var/spool/slurm/d
+$ systemctl start slurmd
+$ sinfo
+PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+debug*       up   infinite      1   idle linux1
+```
+
+## Finish Slurm configuration
+These commands are run on slurm-ctrl
+```console
+$ sacctmgr add cluster compute-cluster
+$ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
+$ sacctmgr create user nvidia account=compute-account adminlevel=None
+```
+
+## Run a job from slurm-ctrl
+```console
+$ su - nvidia
+$ srun -N 1 hostname
+linux1
+```
+
 
 
 
