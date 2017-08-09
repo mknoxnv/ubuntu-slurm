@@ -8,7 +8,7 @@ This guide provides the steps to install a slurm controller node as well as a si
 The following steps make the follwing assumptions.
 * OS: Ubuntu 16.04
 * Slurm controller node hostname: slurm-ctrl
-* Non-root user: nvidia
+* Non-root user: myuser
 * Compute node hostname: linux1
 * Slurm DB Password: slurmdbpass
 * Passwordless SSH is working between slurm-ctrl and linux1
@@ -150,12 +150,12 @@ $ update-grub
 ```console
 $ sacctmgr add cluster compute-cluster
 $ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
-$ sacctmgr create user nvidia account=compute-account adminlevel=None
+$ sacctmgr create user myuser account=compute-account adminlevel=None
 ```
 
 ## Run a job from slurm-ctrl
 ```console
-$ su - nvidia
+$ su - myuser
 $ srun -N 1 hostname
 linux1
 ```
@@ -173,7 +173,7 @@ account    required     /lib/x86_64-linux-gnu/security/pam_slurm.so
 On slurm-ctrl as non-root user
 ```console
 $ ssh linux1 hostname
-Access denied: user nvidia (uid=1000) has no active jobs on this node.
+Access denied: user myuser (uid=1000) has no active jobs on this node.
 Connection to linux1 closed by remote host.
 Connection to linux1 closed.
 $ salloc -N 1 -w linux1
