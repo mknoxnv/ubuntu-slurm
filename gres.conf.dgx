@@ -1,0 +1,8 @@
+Name=gpu File=/dev/nvidia0 CPUs=0-19,40-59
+Name=gpu File=/dev/nvidia1 CPUs=0-19,40-59
+Name=gpu File=/dev/nvidia2 CPUs=0-19,40-59
+Name=gpu File=/dev/nvidia3 CPUs=0-19,40-59
+Name=gpu File=/dev/nvidia4 CPUs=20-39,60-79
+Name=gpu File=/dev/nvidia5 CPUs=20-39,60-79
+Name=gpu File=/dev/nvidia6 CPUs=20-39,60-79
+Name=gpu File=/dev/nvidia7 CPUs=20-39,60-79
