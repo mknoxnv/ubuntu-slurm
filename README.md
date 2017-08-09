@@ -162,7 +162,8 @@ linux1
 
 ## Enable Slurm PAM SSH Control
 This prevents users from ssh-ing into a compute node on which they do not have an allocation.
-On compute node:
+
+On the compute nodes:
 ```console
 $ cp /storage/slurm-17.02.6/contribs/pam/.libs/pam_slurm.so /lib/x86_64-linux-gnu/security/
 $ vi /etc/pam.d/sshd
