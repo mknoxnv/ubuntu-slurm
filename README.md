@@ -54,6 +54,7 @@ exit
 
 ## Download and build Slurm
 Download tar.bz2 from https://www.schedmd.com/downloads.php
+
 Copy tar file to /storage
 ```console
 $ cd /storage
