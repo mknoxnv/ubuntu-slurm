@@ -20,7 +20,7 @@ apt-get update
 apt-get install gcc make
 ```
 
-## Install munge
+### Install munge
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and validating credentials.
 https://dun.github.io/munge/
 ```console
@@ -31,13 +31,13 @@ $ chmod 400 /etc/munge/munge.key
 $ service munge start
 ```
 
-## Test munge
+### Test munge
 ```console
 $ munge -n | unmunge | grep STATUS
 STATUS:           Success (0)
 ```
 
-## Install MariaDB for Slurm accounting
+### Install MariaDB for Slurm accounting
 MariaDB is an open source Mysql compatible database.
 https://mariadb.org/
 ```console
