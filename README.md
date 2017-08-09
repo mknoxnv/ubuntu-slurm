@@ -160,6 +160,27 @@ $ srun -N 1 hostname
 linux1
 ```
 
+## Enable Slurm PAM SSH Control
+This prevents users from ssh-ing into a compute node on which they do not have an allocation.
+On compute node:
+```console
+$ cp /storage/slurm-17.02.6/contribs/pam/.libs/pam_slurm.so /lib/x86_64-linux-gnu/security/
+$ vi /etc/pam.d/sshd
+account    required     /lib/x86_64-linux-gnu/security/pam_slurm.so
+```
+
+On slurm-ctrl as non-root user
+```console
+$ ssh linux1 hostname
+Access denied: user nvidia (uid=1000) has no active jobs on this node.
+Connection to linux1 closed by remote host.
+Connection to linux1 closed.
+$ salloc -N 1 -w linux1
+$ ssh linux1 hostname
+linux1
+```
+
+
 
 
 
