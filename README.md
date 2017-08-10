@@ -107,6 +107,9 @@ $ systemctl daemon-reload
 $ ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 $ systemctl enable slurmdbd
 $ systemctl start slurmdbd
+$ sacctmgr add cluster compute-cluster
+$ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
+$ sacctmgr create user myuser account=compute-account adminlevel=None
 $ systemctl enable slurmctld
 $ systemctl start slurmctld
 $ sinfo
@@ -162,13 +165,6 @@ $ vi /etc/default/grub
 GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
 $ update-grub
 $ reboot
-```
-
-## Finish Slurm configuration on slurm-ctrl
-```console
-$ sacctmgr add cluster compute-cluster
-$ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
-$ sacctmgr create user myuser account=compute-account adminlevel=None
 ```
 
 ## Run a job from slurm-ctrl
