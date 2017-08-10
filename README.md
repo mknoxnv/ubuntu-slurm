@@ -32,11 +32,11 @@ MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and
 https://dun.github.io/munge/
 ```console
 $ apt-get install libmunge-dev libmunge2 munge
-$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
-$ chown munge:munge /etc/munge/munge.key
-$ chmod 400 /etc/munge/munge.key
+$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munged.key
+$ chown munge:munge /etc/munge/munged.key
+$ chmod 400 /etc/munge/munged.key
 $ vi /etc/default/munge
-OPTIONS="--force --key-file /etc/munge/munge.key --num-threads 1"
+OPTIONS="--force --key-file /etc/munge/munged.key --num-threads 1"
 $ service munge start
 ```
 
@@ -106,10 +106,10 @@ https://dun.github.io/munge/
 $ apt-get update
 $ apt-get install libmunge-dev libmunge2 munge
 $ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
-$ chown munge:munge /etc/munge/munge.key
-$ chmod 400 /etc/munge/munge.key
+$ chown munge:munge /etc/munge/munged.key
+$ chmod 400 /etc/munge/munged.key
 $ vi /etc/default/munge
-OPTIONS="--force --key-file /etc/munge/munge.key --num-threads 1"
+OPTIONS="--force --key-file /etc/munge/munged.key --num-threads 1"
 $ service munge start
 ```
 
