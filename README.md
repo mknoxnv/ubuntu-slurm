@@ -19,8 +19,6 @@ The following steps make the follwing assumptions.
 
 The slurm controller node (slurm-ctrl) does not need to be a physical piece of hardware.  A VM is fine.  However, this node will be used by users for compiling codes and as such it should have the same OS and libraries (such as CUDA) that exist on the compute nodes.
 
-Values that should be changed for your particular installation are bolded.
-
 ## Install slurm and associated components on slurm controller node.
 Install prerequisites 
 ```console
@@ -36,12 +34,11 @@ MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and
 https://dun.github.io/munge/
 ```console
 $ apt-get install libmunge-dev libmunge2 munge
-$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munged.key
-$ chown munge:munge /etc/munge/munged.key
-$ chmod 400 /etc/munge/munged.key
-$ vi /etc/default/munge
-OPTIONS="--force --key-file /etc/munge/munged.key --num-threads 1"
-$ service munge start
+$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
+$ chown munge:munge /etc/munge/munge.key
+$ chmod 400 /etc/munge/munge.key
+$ systemctl enable munge
+$ systemctl start munge
 ```
 
 ### Test munge
@@ -53,12 +50,14 @@ STATUS:           Success (0)
 ### Install MariaDB for Slurm accounting
 MariaDB is an open source Mysql compatible database.
 https://mariadb.org/
+
+In the following steps change the DB password "slurmdbpass" to something secure.
 ```console
 $ apt-get install mariadb-server
 $ mysql -u root
 create database slurm_acct_db;
 create user 'slurm'@'localhost';
-set password for 'slurm'@'localhost' = password('\*\*slurmdbpass\*\*');
+set password for 'slurm'@'localhost' = password('slurmdbpass');
 grant usage on *.* to 'slurm'@'localhost';
 grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';
 flush privileges;
@@ -87,8 +86,15 @@ Copy into place config files from this repo which you've already cloned into /st
 $ cd /storage
 $ cp ubuntu-slurm/slurmdbd.service /lib/systemd/system/
 $ cp ubuntu-slurm/slurmctld.service /lib/systemd/system/
+
+Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
+you used in the above SQL section.
 $ cp ubuntu-slurm/slurm.conf /etc/slurm/
+
+Edit /storage/ubuntu-slurm/slurmdbd.conf and replace StoragePass=slrumdbpass with the DB password you used
+in the above SQL section.
 $ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
+
 $ systemctl daemon-reload
 $ ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 $ systemctl enable slurmdbd
@@ -108,11 +114,10 @@ https://dun.github.io/munge/
 $ apt-get update
 $ apt-get install libmunge-dev libmunge2 munge
 $ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
-$ chown munge:munge /etc/munge/munged.key
-$ chmod 400 /etc/munge/munged.key
-$ vi /etc/default/munge
-OPTIONS="--force --key-file /etc/munge/munged.key --num-threads 1"
-$ service munge start
+$ chown munge:munge /etc/munge/munge.key
+$ chmod 400 /etc/munge/munge.key
+$ systemctl enable munge
+$ systemctl start munge
 ```
 
 ### Test munge
@@ -128,12 +133,14 @@ STATUS:           Success (0)
 $ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
 $ mkdir /etc/slurm
 $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
+$ cp /storage/ubuntu-slurm/slurmd.service /lib/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
 $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
 $ mkdir -p /var/spool/slurm/d
+$ systemctl enable slurmd
 $ systemctl start slurmd
 $ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
