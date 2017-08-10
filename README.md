@@ -19,6 +19,8 @@ The following steps make the follwing assumptions.
 
 The slurm controller node (slurm-ctrl) does not need to be a physical piece of hardware.  A VM is fine.  However, this node will be used by users for compiling codes and as such it should have the same OS and libraries (such as CUDA) that exist on the compute nodes.
 
+Values that should be changed for your particular installation are bolded.
+
 ## Install slurm and associated components on slurm controller node.
 Install prerequisites 
 ```console
@@ -56,7 +58,7 @@ $ apt-get install mariadb-server
 $ mysql -u root
 create database slurm_acct_db;
 create user 'slurm'@'localhost';
-set password for 'slurm'@'localhost' = password('slurmdbpass');
+set password for 'slurm'@'localhost' = password('**slurmdbpass**');
 grant usage on *.* to 'slurm'@'localhost';
 grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';
 flush privileges;
