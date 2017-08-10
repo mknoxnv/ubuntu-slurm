@@ -25,6 +25,8 @@ Install prerequisites
 $ apt-get update
 $ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev
 $ gem install fpm
+$ cd /storage
+$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 ```
 
 ### Install munge
@@ -67,7 +69,6 @@ Download tar.bz2 from https://www.schedmd.com/downloads.php
 Copy tar file to /storage
 ```console
 $ cd /storage
-$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
