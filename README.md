@@ -23,7 +23,7 @@ The slurm controller node (slurm-ctrl) does not need to be a physical piece of h
 Install prerequisites 
 ```console
 $ apt-get update
-$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev
+$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
 $ gem install fpm
 $ cd /storage
 $ git clone https://github.com/mknoxnv/ubuntu-slurm.git
