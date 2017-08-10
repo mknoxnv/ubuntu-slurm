@@ -29,6 +29,14 @@ $ cd /storage
 $ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 ```
 
+Customize slurm.conf with your slurm controller and compute node hostnames:
+```console
+$ vi ubuntu-slurm/slurm.conf
+ControlMachine=slurm-ctrl
+NodeName=linux1 (you can specify a range of nodes here, for example: linux[1-10])
+```
+
+
 ### Install munge
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and validating credentials.
 https://dun.github.io/munge/
