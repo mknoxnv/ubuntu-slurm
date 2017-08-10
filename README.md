@@ -181,8 +181,22 @@ $ ssh linux1 hostname
 linux1
 ```
 
+## Allow slurm to set NV_GPU
+This plugin will copy the value of the CUDA_VISIBLE_DEVICES environment variable to NV_GPU.  NV_GPU is used by nvidia-docker to determine which GPUs a docker container can access.
 
+On slurm-ctrl:
+```console
+$ cd /storage/ubuntu-slurm
+$ gcc -fPIC -shared -o nvdocker-plugin.so nvdocker-plugin.c
+$ cp nvdocker-plugin.so /usr/lib/slurm/
+$ systemctl restart slurmctld
+```
 
+On the compute nodes:
+```console
+$ cp /storage/ubuntu-slurm/nvdocker-plugin.so /usr/lib/slurm/
+$ systemctl restart slurmd
+```
 
 
 
