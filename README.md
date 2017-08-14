@@ -75,8 +75,10 @@ exit
 ### Download, build, and install Slurm
 Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
+
 ```console
 $ cd /storage
+$ wget https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2`
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
