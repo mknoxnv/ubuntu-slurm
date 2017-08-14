@@ -94,8 +94,8 @@ $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 
 Copy into place config files from this repo which you've already cloned into /storage
 $ cd /storage
-$ cp ubuntu-slurm/slurmdbd.service /lib/systemd/system/
-$ cp ubuntu-slurm/slurmctld.service /lib/systemd/system/
+$ cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
+$ cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
 
 Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
 you used in the above SQL section.
