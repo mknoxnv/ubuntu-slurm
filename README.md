@@ -106,7 +106,6 @@ in the above SQL section.
 $ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
 
 $ systemctl daemon-reload
-$ ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 $ systemctl enable slurmdbd
 $ systemctl start slurmdbd
 $ sacctmgr add cluster compute-cluster
