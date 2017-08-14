@@ -16,6 +16,7 @@ The following steps make the follwing assumptions.
 * The UIDs and GIDs will be consistent between all the nodes.
 * Slurm will be used to control SSH access to compute nodes.
 * Compute nodes are DNS resolvable.
+* Compute nodes have GPUs and the latest CUDA drivers installed
 
 The slurm controller node (slurm-ctrl) does not need to be a physical piece of hardware.  A VM is fine.  However, this node will be used by users for compiling codes and as such it should have the same OS and libraries (such as CUDA) that exist on the compute nodes.
 
@@ -27,16 +28,17 @@ $ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev
 $ gem install fpm
 ```
 
+### Copy git repo
+```console
+$ cd /storage
+$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
+```
+
 Customize slurm.conf with your slurm controller and compute node hostnames:
 ```console
 $ vi ubuntu-slurm/slurm.conf
 ControlMachine=slurm-ctrl
 NodeName=linux1 (you can specify a range of nodes here, for example: linux[1-10])
-```
-### Copy git repo
-```console
-$ cd /storage
-$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 ```
 
 ### Install munge
@@ -44,9 +46,6 @@ MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and
 https://dun.github.io/munge/
 ```console
 $ apt-get install libmunge-dev libmunge2 munge
-$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
-$ chown munge:munge /etc/munge/munge.key
-$ chmod 400 /etc/munge/munge.key
 $ systemctl enable munge
 $ systemctl start munge
 ```
@@ -77,8 +76,10 @@ exit
 ### Download, build, and install Slurm
 Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
+
 ```console
 $ cd /storage
+$ wget https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2`
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
@@ -94,8 +95,8 @@ $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 
 Copy into place config files from this repo which you've already cloned into /storage
 $ cd /storage
-$ cp ubuntu-slurm/slurmdbd.service /lib/systemd/system/
-$ cp ubuntu-slurm/slurmctld.service /lib/systemd/system/
+$ cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
+$ cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
 
 Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
 you used in the above SQL section.
@@ -145,7 +146,7 @@ STATUS:           Success (0)
 $ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
 $ mkdir /etc/slurm
 $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
-$ cp /storage/ubuntu-slurm/slurmd.service /lib/systemd/system/
+$ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
 gres.conf.dgx is an example configuration for the DGX-1.
