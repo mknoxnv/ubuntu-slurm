@@ -16,6 +16,7 @@ The following steps make the follwing assumptions.
 * The UIDs and GIDs will be consistent between all the nodes.
 * Slurm will be used to control SSH access to compute nodes.
 * Compute nodes are DNS resolvable.
+* Compute nodes have GPUs and the latest CUDA drivers installed
 
 The slurm controller node (slurm-ctrl) does not need to be a physical piece of hardware.  A VM is fine.  However, this node will be used by users for compiling codes and as such it should have the same OS and libraries (such as CUDA) that exist on the compute nodes.
 
