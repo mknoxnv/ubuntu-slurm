@@ -149,6 +149,7 @@ $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
 $ cp /storage/ubuntu-slurm/slurmd.service /lib/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
+gres.conf.dgx is an example configuration for the DGX-1.
 $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
