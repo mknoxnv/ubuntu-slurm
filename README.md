@@ -45,9 +45,6 @@ MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and
 https://dun.github.io/munge/
 ```console
 $ apt-get install libmunge-dev libmunge2 munge
-$ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
-$ chown munge:munge /etc/munge/munge.key
-$ chmod 400 /etc/munge/munge.key
 $ systemctl enable munge
 $ systemctl start munge
 ```
