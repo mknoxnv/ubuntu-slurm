@@ -27,16 +27,17 @@ $ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev
 $ gem install fpm
 ```
 
+### Copy git repo
+```console
+$ cd /storage
+$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
+```
+
 Customize slurm.conf with your slurm controller and compute node hostnames:
 ```console
 $ vi ubuntu-slurm/slurm.conf
 ControlMachine=slurm-ctrl
 NodeName=linux1 (you can specify a range of nodes here, for example: linux[1-10])
-```
-### Copy git repo
-```console
-$ cd /storage
-$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
 ```
 
 ### Install munge
