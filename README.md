@@ -146,7 +146,7 @@ STATUS:           Success (0)
 $ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
 $ mkdir /etc/slurm
 $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
-$ cp /storage/ubuntu-slurm/slurmd.service /lib/systemd/system/
+$ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
 gres.conf.dgx is an example configuration for the DGX-1.
