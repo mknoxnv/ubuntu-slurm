@@ -130,7 +130,7 @@ $ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
 $ chown munge:munge /etc/munge/munge.key
 $ chmod 400 /etc/munge/munge.key
 $ systemctl enable munge
-$ systemctl start munge
+$ systemctl restart munge
 ```
 
 ### Test munge
@@ -150,6 +150,7 @@ $ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
 gres.conf.dgx is an example configuration for the DGX-1.
+Use "nvidia-smi topo -m" to find the GPU-CPU affinity.
 $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
