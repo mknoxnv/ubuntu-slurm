@@ -110,7 +110,7 @@ $ systemctl daemon-reload
 $ systemctl enable slurmdbd
 $ systemctl start slurmdbd
 $ sacctmgr add cluster compute-cluster
-$ sacctmgr add account compute-account description "Compute accounts" Organization=OurOrg
+$ sacctmgr add account compute-account description="Compute accounts" Organization=OurOrg
 $ sacctmgr create user myuser account=compute-account adminlevel=None
 $ systemctl enable slurmctld
 $ systemctl start slurmctld
