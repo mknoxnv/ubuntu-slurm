@@ -149,8 +149,12 @@ $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
 $ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
-gres.conf.dgx is an example configuration for the DGX-1.
+gres.conf.dgx is an example configuration for the DGX-1. 
 Use "nvidia-smi topo -m" to find the GPU-CPU affinity.
+
+The node-config.sh script will, if run on the compute node, output the appropriate lines to
+add to slurm.conf and gres.conf.
+
 $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
