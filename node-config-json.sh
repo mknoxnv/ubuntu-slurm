@@ -6,9 +6,9 @@ echo ""$HOSTNAME"_CPU_LAYOUT:"
 echo "    Sockets: \"$SOCKETS\""
 echo "    CoresPerSocket: \"$CORESPERSOCKET\""
 echo "    ThreadsPerCore: \"$THREADSPERCORE\""
+COUNT="0"
 for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
         do
-        COUNT="0"
         CPUAFFINITY=`cat /sys/class/pci_bus/0000:$i/cpulistaffinity`
         echo ""$HOSTNAME"_GPU_AFFINITY:"
         echo "    GPU"$COUNT": \"$CPUAFFINITY\""
