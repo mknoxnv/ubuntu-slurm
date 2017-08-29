@@ -6,7 +6,7 @@ Slurm overview: https://slurm.schedmd.com/overview.html
 
 This guide provides the steps to install a slurm controller node as well as a single compute node.  
 The following steps make the follwing assumptions.
-* OS: Ubuntu 16.04
+* OS: Ubuntu
 * Slurm controller node hostname: slurm-ctrl
 * Non-root user: myuser
 * Compute node hostname: linux1
