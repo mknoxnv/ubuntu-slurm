@@ -12,4 +12,5 @@ for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
         CPUAFFINITY=`cat /sys/class/pci_bus/0000:$i/cpulistaffinity`
         echo ""$HOSTNAME"_GPU_AFFINITY:"
         echo "    GPU"$COUNT": \"$CPUAFFINITY\""
+        ((COUNT++))
         done
