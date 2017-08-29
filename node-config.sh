@@ -11,7 +11,6 @@ for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
         echo "NodeName=$HOSTNAME Name=gpu File=/dev/nvidia"$COUNT" CPUs=$CPUAFFINITY"
         ((COUNT++))
         done
-((COUNT++))
 
 echo "---"
 echo ""
