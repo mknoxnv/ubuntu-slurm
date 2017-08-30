@@ -15,4 +15,4 @@ for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
 echo "---"
 echo ""
 echo "Add line to end of slurm.conf:"
-echo "NodeName="$HOSTNAME" Gres=gpu:$COUNT Sockets=$SOCKETS CoresPerSocket=$CORESPERSOCKET ThreadsPerCore=$THREADSPERCORE State=UKNOWN"
+echo "NodeName="$HOSTNAME" Gres=gpu:$COUNT Sockets=$SOCKETS CoresPerSocket=$CORESPERSOCKET ThreadsPerCore=$THREADSPERCORE State=UNKNOWN"
