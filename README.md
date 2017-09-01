@@ -197,6 +197,15 @@ $ vi /etc/pam.d/sshd
 account    required     /lib/x86_64-linux-gnu/security/pam_slurm.so
 ```
 
+If you are using something such as LDAP for user accounts and want to allow local system 
+accounts (for example, a non-root local admin account) to login without going through 
+slurm make the following change.  Add this line to the beginning of the sshd file.
+
+```console
+$ vi /etc/pam.d/sshd
+account    sufficient   pam_localuser.so
+```
+
 On slurm-ctrl as non-root user
 ```console
 $ ssh linux1 hostname
