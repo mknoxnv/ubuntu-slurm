@@ -27,6 +27,13 @@ $ apt-get update
 $ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
 $ gem install fpm
 ```
+For Ubuntu 14.04
+```console
+$ apt-get update
+$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
+$ gem install fpm
+```
+
 
 ### Copy git repo
 ```console
