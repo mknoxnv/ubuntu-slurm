@@ -79,8 +79,9 @@ STATUS:           Success (0)
 MariaDB is an open source Mysql compatible database.
 https://mariadb.org/
 
-Ubuntu 16.04
 In the following steps change the DB password "slurmdbpass" to something secure.
+
+Ubuntu 16.04
 ```console
 $ apt-get install mariadb-server
 $ systemctl enable mysql
