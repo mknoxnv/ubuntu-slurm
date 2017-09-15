@@ -246,6 +246,7 @@ $ systemctl start slurmd
 Ubuntu 14.04
 ```console
 $ cp /storage/ubuntu-slurm/slurmd.init /etc/init.d/slurmd
+$ cp /storage/ubuntu-slurm/slurm.default /etc/default
 $ chmod 755 /etc/init.d/slurmd
 $ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
 $ service slurmd start
