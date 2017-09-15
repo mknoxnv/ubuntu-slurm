@@ -1,0 +1,14 @@
+# Defaults for slurmd initscript
+# sourced by /etc/init.d/slurmd
+# installed at /etc/default/slurmd by the maintainer scripts
+#
+# This is a POSIX shell fragment
+#
+# Additional options that are passed to the slurmctld daemon
+#SLURMCTLD_OPTIONS=""
+
+
+
+
+# Additional options that are passed to the slurmd daemon
+SLURMD_OPTIONS="-d/usr/sbin/slurmstepd"
