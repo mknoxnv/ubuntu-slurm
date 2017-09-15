@@ -177,6 +177,7 @@ $ service slurmdbd start
 $ service slurmd start
 ```
 
+## Create initial slurm cluster, account, and user.
 ```console
 $ sacctmgr add cluster compute-cluster
 $ sacctmgr add account compute-account description="Compute accounts" Organization=OurOrg
@@ -254,6 +255,7 @@ $ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
 $ service slurmd start
 ```
 
+## Test Slurm
 ```console
 $ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
