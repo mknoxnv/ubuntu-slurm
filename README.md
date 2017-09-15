@@ -22,12 +22,14 @@ The slurm controller node (slurm-ctrl) does not need to be a physical piece of h
 
 ## Install slurm and associated components on slurm controller node.
 Install prerequisites 
+
+Ubuntu 16.04
 ```console
 $ apt-get update
 $ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
 $ gem install fpm
 ```
-For Ubuntu 14.04
+Ubuntu 14.04
 ```console
 $ apt-get update
 $ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
@@ -51,6 +53,8 @@ NodeName=linux1 (you can specify a range of nodes here, for example: linux[1-10]
 ### Install munge
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating and validating credentials.
 https://dun.github.io/munge/
+
+Ubuntu 16.04
 ```console
 $ apt-get install libmunge-dev libmunge2 munge
 $ systemctl enable munge
@@ -75,6 +79,7 @@ STATUS:           Success (0)
 MariaDB is an open source Mysql compatible database.
 https://mariadb.org/
 
+Ubuntu 16.04
 In the following steps change the DB password "slurmdbpass" to something secure.
 ```console
 $ apt-get install mariadb-server
@@ -89,6 +94,7 @@ grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';
 flush privileges;
 exit
 ```
+
 Ubuntu 14.04
 ```console
 $ apt-get install mariadb-server
@@ -107,7 +113,6 @@ exit
 ### Download, build, and install Slurm
 Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
-
 ```console
 $ cd /storage
 $ wget https://www.schedmd.com/downloads/archive/slurm-17.02.6.tar.bz2
@@ -124,6 +129,7 @@ $ useradd slurm
 $ mkdir -p /etc/slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 ```
+
 Ubuntu 16.04
 ```console
 Copy into place config files from this repo which you've already cloned into /storage
@@ -131,6 +137,7 @@ $ cd /storage
 $ cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
 $ cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
 ```
+
 Ubuntu 14.04
 ```console
 Copy into place config files from this repo which you've already cloned into /storage
@@ -141,6 +148,7 @@ $ chmod 755 /etc/init.d/slurmd
 $ cp ubuntu-slurm/slurmdbd.init /etc/init.d/slurmdbd
 $ chmod 755 /etc/init.d/slurmdbd
 ```
+
 ```console
 Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
 you used in the above SQL section.
@@ -150,28 +158,32 @@ Edit /storage/ubuntu-slurm/slurmdbd.conf and replace StoragePass=slrumdbpass wit
 in the above SQL section.
 $ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
 ```
+
 Ubuntu 16.04
 ```console
 $ systemctl daemon-reload
 $ systemctl enable slurmdbd
 $ systemctl start slurmdbd
-$ sacctmgr add cluster compute-cluster
-$ sacctmgr add account compute-account description="Compute accounts" Organization=OurOrg
-$ sacctmgr create user myuser account=compute-account adminlevel=None
 $ systemctl enable slurmctld
 $ systemctl start slurmctld
 ```
+
 Ubuntu 14.04
 ```console
 $ update-rc.d slurmdbd start 20 3 4 5 . stop 20 0 1 6 .
 $ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
 $ service slurmdbd start
-$ sinfo
 ```
+
 ```console
+$ sacctmgr add cluster compute-cluster
+$ sacctmgr add account compute-account description="Compute accounts" Organization=OurOrg
+$ sacctmgr create user myuser account=compute-account adminlevel=None
+$ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      0    n/a
 ```
+
 ## Install slurm and associated components on a compute node.
 
 ### Install munge
@@ -183,8 +195,18 @@ $ apt-get install libmunge-dev libmunge2 munge
 $ scp slurm-ctrl:/etc/munge/munge.key /etc/munge/
 $ chown munge:munge /etc/munge/munge.key
 $ chmod 400 /etc/munge/munge.key
+```
+
+Ubuntu 16.04
+```console
 $ systemctl enable munge
 $ systemctl restart munge
+```
+
+Ubuntu 14.04
+```console
+$ update-rc.d munge enable
+$ service munge start
 ```
 
 ### Test munge
@@ -200,7 +222,6 @@ STATUS:           Success (0)
 $ dpkg -i /storage/slurm-17.02.6_1.0_amd64.deb
 $ mkdir /etc/slurm
 $ cp /storage/ubuntu-slurm/slurm.conf /etc/slurm/slurm.conf
-$ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 
 If necessary modify gres.conf to reflect the properties of this compute node.
 gres.conf.dgx is an example configuration for the DGX-1. 
@@ -213,8 +234,21 @@ $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
 $ useradd slurm
 $ mkdir -p /var/spool/slurm/d
+```
+
+Ubuntu 16.04
+```console
+$ cp /storage/ubuntu-slurm/slurmd.service /etc/systemd/system/
 $ systemctl enable slurmd
 $ systemctl start slurmd
+```
+
+Ubuntu 14.04
+```console
+$ cp /storage/ubuntu-slurm/slurmd.init /etc/init.d/slurmd
+$ chmod 755 /etc/init.d/slurmd
+$ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
+$ service slurmd start
 $ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      1   idle linux1
