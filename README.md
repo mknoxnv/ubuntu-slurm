@@ -174,6 +174,7 @@ Ubuntu 14.04
 $ update-rc.d slurmdbd start 20 3 4 5 . stop 20 0 1 6 .
 $ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
 $ service slurmdbd start
+$ service slurmd start
 ```
 
 ```console
@@ -251,6 +252,9 @@ $ cp /storage/ubuntu-slurm/slurm.default /etc/default
 $ chmod 755 /etc/init.d/slurmd
 $ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
 $ service slurmd start
+```
+
+```console
 $ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      1   idle linux1
