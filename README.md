@@ -24,13 +24,13 @@ The slurm controller node (slurm-ctrl) does not need to be a physical piece of h
 Install prerequisites 
 ```console
 $ apt-get update
-$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
+$ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
 $ gem install fpm
 ```
 For Ubuntu 14.04
 ```console
 $ apt-get update
-$ apt-get install gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
+$ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
 $ gem install fpm
 ```
 
@@ -57,6 +57,14 @@ $ systemctl enable munge
 $ systemctl start munge
 ```
 
+Ubuntu 14.04
+```console
+$ apt-get install libmunge-dev libmunge2 munge
+$ create-munge-key
+$ update-rc.d munge enable
+$ service munge start
+```
+
 ### Test munge
 ```console
 $ munge -n | unmunge | grep STATUS
@@ -70,6 +78,22 @@ https://mariadb.org/
 In the following steps change the DB password "slurmdbpass" to something secure.
 ```console
 $ apt-get install mariadb-server
+$ systemctl enable mysql
+$ systemctl start mysql
+$ mysql -u root
+create database slurm_acct_db;
+create user 'slurm'@'localhost';
+set password for 'slurm'@'localhost' = password('slurmdbpass');
+grant usage on *.* to 'slurm'@'localhost';
+grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';
+flush privileges;
+exit
+```
+Ubuntu 14.04
+```console
+$ apt-get install mariadb-server
+$ update-rc.d mysql enable
+$ service mysql start
 $ mysql -u root
 create database slurm_acct_db;
 create user 'slurm'@'localhost';
@@ -86,7 +110,7 @@ Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
 ```console
 $ cd /storage
-$ wget https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2
+$ wget https://www.schedmd.com/downloads/archive/slurm-17.02.6.tar.bz2
 $ tar xvjf slurm-17.02.6.tar.bz2
 $ cd slurm-17.02.6
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/
@@ -99,12 +123,25 @@ $ dpkg -i slurm-17.02.6_1.0_amd64.deb
 $ useradd slurm 
 $ mkdir -p /etc/slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
-
+```
+Ubuntu 16.04
+```console
 Copy into place config files from this repo which you've already cloned into /storage
 $ cd /storage
 $ cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
 $ cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
-
+```
+Ubuntu 14.04
+```console
+Copy into place config files from this repo which you've already cloned into /storage
+$ cd /storage
+$ cp ubuntu-slurm/slurmd.init /etc/init.d/slurmd
+$ cp ubuntu-slurm/slurm.default /etc/default/slurm
+$ chmod 755 /etc/init.d/slurmd
+$ cp ubuntu-slurm/slurmdbd.init /etc/init.d/slurmdbd
+$ chmod 755 /etc/init.d/slurmdbd
+```
+```console
 Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
 you used in the above SQL section.
 $ cp ubuntu-slurm/slurm.conf /etc/slurm/
@@ -112,7 +149,9 @@ $ cp ubuntu-slurm/slurm.conf /etc/slurm/
 Edit /storage/ubuntu-slurm/slurmdbd.conf and replace StoragePass=slrumdbpass with the DB password you used
 in the above SQL section.
 $ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
-
+```
+Ubuntu 16.04
+```console
 $ systemctl daemon-reload
 $ systemctl enable slurmdbd
 $ systemctl start slurmdbd
@@ -121,7 +160,15 @@ $ sacctmgr add account compute-account description="Compute accounts" Organizati
 $ sacctmgr create user myuser account=compute-account adminlevel=None
 $ systemctl enable slurmctld
 $ systemctl start slurmctld
+```
+Ubuntu 14.04
+```console
+$ update-rc.d slurmdbd start 20 3 4 5 . stop 20 0 1 6 .
+$ update-rc.d slurmd start 20 3 4 5 . stop 20 0 1 6 .
+$ service slurmdbd start
 $ sinfo
+```
+```console
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      0    n/a
 ```
