@@ -235,6 +235,7 @@ add to slurm.conf and gres.conf.
 
 $ cp /storage/ubuntu-slurm/gres.conf /etc/slurm/gres.conf
 $ cp /storage/ubuntu-slurm/cgroup.conf /etc/slurm/cgroup.conf
+$ cp /storage/ubuntu-slurm/cgroup_allowed_devices_file.conf /etc/slurm/cgroup_allowed_devices_file.conf
 $ useradd slurm
 $ mkdir -p /var/spool/slurm/d
 ```
