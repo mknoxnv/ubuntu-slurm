@@ -116,16 +116,16 @@ Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
 ```console
 $ cd /storage
-$ wget https://www.schedmd.com/downloads/archive/slurm-17.02.6.tar.bz2
-$ tar xvjf slurm-17.02.6.tar.bz2
-$ cd slurm-17.02.6
+$ wget https://download.schedmd.com/slurm/slurm-17.11.12.tar.bz2
+$ tar xvjf slurm-17.11.12.tar.bz2
+$ cd slurm-17.11.12
 $ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/ --without-shared-libslurm
 $ make
 $ make contrib
 $ make install
 $ cd ..
-$ fpm -s dir -t deb -v 1.0 -n slurm-17.02.6 --prefix=/usr -C /tmp/slurm-build .
-$ dpkg -i slurm-17.02.6_1.0_amd64.deb
+$ fpm -s dir -t deb -v 1.0 -n slurm-17.11.12 --prefix=/usr -C /tmp/slurm-build .
+$ dpkg -i slurm-17.11.12_1.0_amd64.deb
 $ useradd slurm 
 $ mkdir -p /etc/slurm /etc/slurm/prolog.d /etc/slurm/epilog.d /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 $ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
