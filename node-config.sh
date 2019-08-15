@@ -5,7 +5,7 @@ CORESPERSOCKET=`lscpu | grep "Core(s) per socket:" | cut -d : -f 2 | awk '{print
 COUNT="0"
 echo "Add lines between --- to gres.conf:"
 echo "---"
-for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
+for i in `lspci | grep -i nvidia | grep -v Audio | awk '{print $1}' | cut -d : -f 1`
         do
         CPUAFFINITY=`cat /sys/class/pci_bus/0000:$i/cpulistaffinity`
         echo "NodeName=$HOSTNAME Name=gpu File=/dev/nvidia"$COUNT" CPUs=$CPUAFFINITY"

@@ -8,7 +8,7 @@ echo "    CoresPerSocket: \"$CORESPERSOCKET\""
 echo "    ThreadsPerCore: \"$THREADSPERCORE\""
 COUNT="0"
 echo ""$HOSTNAME"_GPU_AFFINITY:"
-for i in `lspci | grep -i nvidia | awk '{print $1}' | cut -d : -f 1`
+for i in `lspci | grep -i nvidia | grep -v Audio | awk '{print $1}' | cut -d : -f 1`
         do
         CPUAFFINITY=`cat /sys/class/pci_bus/0000:$i/cpulistaffinity`
         echo "    GPU"$COUNT": \"$CPUAFFINITY\""
