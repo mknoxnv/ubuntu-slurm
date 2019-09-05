@@ -150,16 +150,6 @@ $ cp ubuntu-slurm/slurmdbd.init /etc/init.d/slurmdbd
 $ chmod 755 /etc/init.d/slurmdbd
 ```
 
-```console
-Edit /storage/ubuntu-slurm/slurm.conf and replace AccountingStoragePass=slurmdbpass with the DB password 
-you used in the above SQL section.
-$ cp ubuntu-slurm/slurm.conf /etc/slurm/
-
-Edit /storage/ubuntu-slurm/slurmdbd.conf and replace StoragePass=slrumdbpass with the DB password you used
-in the above SQL section.
-$ cp ubuntu-slurm/slurmdbd.conf /etc/slurm/
-```
-
 Ubuntu 16.04
 ```console
 $ systemctl daemon-reload
