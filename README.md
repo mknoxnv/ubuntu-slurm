@@ -25,27 +25,27 @@ Install prerequisites
 
 Ubuntu 16.04
 ```console
-$ apt-get update
-$ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
-$ gem install fpm
+apt-get update
+apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadb-client-lgpl-dev libmysqlclient-dev
+gem install fpm
 ```
 Ubuntu 14.04
 ```console
-$ apt-get update
-$ apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
-$ gem install fpm
+apt-get update
+apt-get install git gcc make ruby ruby-dev libpam0g-dev libmariadbclient-dev
+gem install fpm
 ```
 
 
 ### Copy git repo
 ```console
-$ cd /storage
-$ git clone https://github.com/mknoxnv/ubuntu-slurm.git
+cd /storage
+git clone https://github.com/mknoxnv/ubuntu-slurm.git
 ```
 
 Customize slurm.conf with your slurm controller and compute node hostnames:
 ```console
-$ vi ubuntu-slurm/slurm.conf
+vi ubuntu-slurm/slurm.conf
 ControlMachine=slurm-ctrl
 NodeName=linux1 (you can specify a range of nodes here, for example: linux[1-10])
 ```
@@ -56,22 +56,22 @@ https://dun.github.io/munge/
 
 Ubuntu 16.04
 ```console
-$ apt-get install libmunge-dev libmunge2 munge
-$ systemctl enable munge
-$ systemctl start munge
+apt-get install libmunge-dev libmunge2 munge
+systemctl enable munge
+systemctl start munge
 ```
 
 Ubuntu 14.04
 ```console
-$ apt-get install libmunge-dev libmunge2 munge
-$ create-munge-key
-$ update-rc.d munge enable
-$ service munge start
+apt-get install libmunge-dev libmunge2 munge
+create-munge-key
+update-rc.d munge enable
+service munge start
 ```
 
 ### Test munge
 ```console
-$ munge -n | unmunge | grep STATUS
+munge -n | unmunge | grep STATUS
 STATUS:           Success (0)
 ```
 
@@ -83,10 +83,10 @@ In the following steps change the DB password "slurmdbpass" to something secure.
 
 Ubuntu 16.04
 ```console
-$ apt-get install mariadb-server
-$ systemctl enable mysql
-$ systemctl start mysql
-$ mysql -u root
+apt-get install mariadb-server
+systemctl enable mysql
+systemctl start mysql
+mysql -u root
 create database slurm_acct_db;
 create user 'slurm'@'localhost';
 set password for 'slurm'@'localhost' = password('slurmdbpass');
@@ -98,10 +98,10 @@ exit
 
 Ubuntu 14.04
 ```console
-$ apt-get install mariadb-server
-$ update-rc.d mysql enable
-$ service mysql start
-$ mysql -u root
+apt-get install mariadb-server
+update-rc.d mysql enable
+service mysql start
+mysql -u root
 create database slurm_acct_db;
 create user 'slurm'@'localhost';
 set password for 'slurm'@'localhost' = password('slurmdbpass');
@@ -115,48 +115,48 @@ exit
 Download tar.bz2 from https://www.schedmd.com/downloads.php to /storage
 
 ```console
-$ cd /storage
-$ wget https://download.schedmd.com/slurm/slurm-17.11.12.tar.bz2
-$ tar xvjf slurm-17.11.12.tar.bz2
-$ cd slurm-17.11.12
-$ ./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/ --without-shared-libslurm
-$ make
-$ make contrib
-$ make install
-$ cd ..
-$ fpm -s dir -t deb -v 1.0 -n slurm-17.11.12 --prefix=/usr -C /tmp/slurm-build .
-$ dpkg -i slurm-17.11.12_1.0_amd64.deb
-$ useradd slurm 
-$ mkdir -p /etc/slurm /etc/slurm/prolog.d /etc/slurm/epilog.d /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
-$ chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
+cd /storage
+wget https://download.schedmd.com/slurm/slurm-17.11.12.tar.bz2
+tar xvjf slurm-17.11.12.tar.bz2
+cd slurm-17.11.12
+./configure --prefix=/tmp/slurm-build --sysconfdir=/etc/slurm --enable-pam --with-pam_dir=/lib/x86_64-linux-gnu/security/ --without-shared-libslurm
+make
+make contrib
+make install
+cd ..
+fpm -s dir -t deb -v 1.0 -n slurm-17.11.12 --prefix=/usr -C /tmp/slurm-build .
+dpkg -i slurm-17.11.12_1.0_amd64.deb
+useradd slurm 
+mkdir -p /etc/slurm /etc/slurm/prolog.d /etc/slurm/epilog.d /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
+chown slurm /var/spool/slurm/ctld /var/spool/slurm/d /var/log/slurm
 ```
 
 Ubuntu 16.04
 ```console
 Copy into place config files from this repo which you've already cloned into /storage
-$ cd /storage
-$ cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
-$ cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
+cd /storage
+cp ubuntu-slurm/slurmdbd.service /etc/systemd/system/
+cp ubuntu-slurm/slurmctld.service /etc/systemd/system/
 ```
 
 Ubuntu 14.04
 ```console
 Copy into place config files from this repo which you've already cloned into /storage
-$ cd /storage
-$ cp ubuntu-slurm/slurmd.init /etc/init.d/slurmd
-$ cp ubuntu-slurm/slurm.default /etc/default/slurm
-$ chmod 755 /etc/init.d/slurmd
-$ cp ubuntu-slurm/slurmdbd.init /etc/init.d/slurmdbd
-$ chmod 755 /etc/init.d/slurmdbd
+cd /storage
+cp ubuntu-slurm/slurmd.init /etc/init.d/slurmd
+cp ubuntu-slurm/slurm.default /etc/default/slurm
+chmod 755 /etc/init.d/slurmd
+cp ubuntu-slurm/slurmdbd.init /etc/init.d/slurmdbd
+chmod 755 /etc/init.d/slurmdbd
 ```
 
 Ubuntu 16.04
 ```console
-$ systemctl daemon-reload
-$ systemctl enable slurmdbd
-$ systemctl start slurmdbd
-$ systemctl enable slurmctld
-$ systemctl start slurmctld
+systemctl daemon-reload
+systemctl enable slurmdbd
+systemctl start slurmdbd
+systemctl enable slurmctld
+systemctl start slurmctld
 ```
 
 Ubuntu 14.04
